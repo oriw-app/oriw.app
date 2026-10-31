@@ -6,546 +6,500 @@
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Oriw</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Oriw is an open-source, local-first whiteboard for Windows, macOS and Linux. Encrypted boards, an AI agent that uses your own model, no seats.">
+<meta name="description" content="Oriw is a fast, private, open-source whiteboard for Windows, macOS and Linux. Encrypted on your device, collaborative without a cloud, with an AI agent that runs on the model you choose.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: the site is a board. Dot-grid canvas ground, sections sit in labelled frames, chrome floats like the app's panels. Tokens mirror the Oriw design system. */
+/* Layout: product-first, one idea per section. Huge centred headlines, short copy, large product visuals on a white ground. Tokens follow the Oriw design system (light only). */
 :root{
-  --canvas-bg:#f7f7f5;--canvas-dot:#d4d4cf;--surface:#ffffff;--surface-muted:#f4f4f5;--border:#e4e4e7;
-  --ink:#18181b;--ink-muted:#52525b;--accent:#4f46e5;--accent-ink:#ffffff;--accent-soft:#eef0ff;--accent-soft-ink:#3730a3;
-  --success:#166534;--success-soft:#ecfdf3;--warning:#92400e;--warning-soft:#fffbeb;
-  --sticky-yellow:#fff0a6;--sticky-coral:#ffd6cb;--sticky-blue:#cfe6ff;--sticky-green:#c8f0d8;--sticky-lilac:#e3d7ff;--sticky-ink:#18181b;
-  --state-hover:rgba(24,24,27,.06);
-  --shadow-float:0 0 0 1px rgba(24,24,27,.06),0 4px 16px rgba(24,24,27,.08);
-  --shadow-sticky:0 1px 1px rgba(0,0,0,.06),0 4px 10px rgba(0,0,0,.1);
-  --font-sans:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
-  --font-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
-  --radius-md:8px;--radius-lg:12px;--radius-xl:16px;
+  --bg:#ffffff;--bg-soft:#f5f5f7;--canvas:#f7f7f5;--dot:#d4d4cf;--surface:#ffffff;--border:#e4e4e7;
+  --ink:#1d1d1f;--ink-muted:#6e6e73;--accent:#4f46e5;--accent-ink:#ffffff;--accent-soft:#eef0ff;--accent-soft-ink:#3730a3;
+  --success:#166534;--warning:#92400e;--warning-soft:#fffbeb;
+  --s-yellow:#fff0a6;--s-coral:#ffd6cb;--s-blue:#cfe6ff;--s-green:#c8f0d8;--s-lilac:#e3d7ff;
+  --shadow-window:0 0 0 1px rgba(0,0,0,.06),0 30px 80px rgba(0,0,0,.14);
+  --shadow-float:0 0 0 1px rgba(0,0,0,.06),0 6px 20px rgba(0,0,0,.08);
+  --shadow-sticky:0 1px 1px rgba(0,0,0,.05),0 3px 8px rgba(0,0,0,.08);
+  --font:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
   color-scheme:light;
 }
 *{box-sizing:border-box}
-body{background:var(--canvas-bg);color:var(--ink);font:400 16px/1.6 var(--font-sans);-webkit-font-smoothing:antialiased}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--canvas-bg)}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.55 var(--font);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:rgba(255,255,255,.9)}
 a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
-h1,h2,h3{text-wrap:balance;margin:0;letter-spacing:-.02em}
-p{margin:0}
-.wrap{max-width:1160px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.dots{background-image:radial-gradient(var(--canvas-dot) 1.2px,transparent 1.2px);background-size:22px 22px}
-.mono{font-family:var(--font-mono)}
-.btn{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 18px;border-radius:10px;font:600 15px/1 var(--font-sans);border:1px solid transparent;cursor:pointer;text-decoration:none}
-.btn:hover{text-decoration:none;box-shadow:inset 0 0 0 999px var(--state-hover)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{text-wrap:balance}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.dots{background-color:var(--canvas);background-image:radial-gradient(var(--dot) 1.1px,transparent 1.1px);background-size:20px 20px}
+.btn{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 24px;border-radius:999px;font:600 16px/1 var(--font);text-decoration:none;border:0;cursor:pointer}
+.btn:hover{text-decoration:none;filter:brightness(1.06)}
 .btn-primary{background:var(--accent);color:var(--accent-ink)}
-.btn-secondary{background:var(--surface);color:var(--ink);border-color:var(--border)}
-.btn svg{flex-shrink:0}
-.frame-label{display:inline-flex;align-items:center;gap:6px;font:600 13px/1 var(--font-sans);color:var(--ink-muted);margin-bottom:14px}
-.overline{font:600 12px/1 var(--font-sans);letter-spacing:.08em;text-transform:uppercase;color:var(--accent-soft-ink)}
-.section{padding-block:88px}
-.section-head{display:flex;flex-direction:column;gap:12px;max-width:640px;margin-bottom:40px}
-.section-head h2{font-size:clamp(28px,4vw,40px);line-height:1.1;font-weight:700}
-.section-head p{color:var(--ink-muted);font-size:18px}
+.link-more{font-size:17px;font-weight:500}
+.link-more::after{content:" \203A"}
 
-/* nav */
-.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;padding-block:12px}
-.nav-in{display:flex;align-items:center;gap:12px;height:56px;padding:0 8px 0 10px;background:var(--surface);border-radius:var(--radius-lg);box-shadow:var(--shadow-float)}
-.logo{display:flex;align-items:center;gap:10px;color:var(--ink);font-weight:700;font-size:17px}
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) blur(16px);-webkit-backdrop-filter:saturate(180%) blur(16px);border-bottom:1px solid rgba(0,0,0,.06)}
+.nav-in{display:flex;align-items:center;gap:28px;height:52px}
+.logo{display:flex;align-items:center;gap:8px;color:var(--ink);font-weight:700;font-size:18px}
 .logo:hover{text-decoration:none}
-.logo-mark{width:30px;height:30px;border-radius:8px;background:var(--ink);display:flex;align-items:center;justify-content:center}
-.logo-mark svg circle{stroke:var(--canvas-bg)}
-.logo-mark svg .core{fill:var(--canvas-bg)}
-.nav-links{display:flex;gap:4px;margin-left:12px}
-.nav-links a{color:var(--ink-muted);font-size:14px;font-weight:500;padding:8px 10px;border-radius:8px}
-.nav-links a:hover{color:var(--ink);background:var(--state-hover);text-decoration:none}
-.nav-spacer{flex-grow:1}
-.nav .btn{height:38px;padding:0 14px;font-size:14px}
-@media (max-width:860px){.nav-links{display:none}}
-@media (max-width:480px){.nav .btn-secondary{display:none}}
+.mark{width:24px;height:24px;border-radius:7px;background:var(--ink);display:flex;align-items:center;justify-content:center}
+.nav-links{display:flex;gap:24px;margin-left:auto}
+.nav-links a{color:var(--ink);font-size:13px;opacity:.8}
+.nav-links a:hover{opacity:1;text-decoration:none}
+.nav .btn{height:32px;padding:0 14px;font-size:13px}
+@media (max-width:760px){.nav-links{display:none}.nav .btn{margin-left:auto}}
 
-/* hero */
-.hero{padding-block:56px 72px}
-.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:48px;align-items:center}
-@media (max-width:940px){.hero-grid{grid-template-columns:minmax(0,1fr)}}
-.pill{display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 12px;border-radius:999px;background:var(--surface);box-shadow:var(--shadow-float);font:500 13px/1 var(--font-sans);color:var(--ink-muted)}
-.pill .dot{width:8px;height:8px;border-radius:99px;background:var(--success)}
-.hero h1{font-size:clamp(40px,6.4vw,68px);line-height:1.02;font-weight:700;letter-spacing:-.035em;margin-top:22px}
-.hero h1 em{font-style:normal;color:var(--accent)}
-.hero .lede{font-size:19px;color:var(--ink-muted);margin-top:20px;max-width:520px}
-.cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
-.hero .fine{margin-top:16px;font-size:13px;color:var(--ink-muted)}
+section{padding-block:120px}
+.head{text-align:center;max-width:820px;margin:0 auto 56px;display:flex;flex-direction:column;gap:18px;align-items:center}
+.eyebrow{font-size:17px;font-weight:600;color:var(--accent)}
+.h-xl{font-size:clamp(56px,11vw,128px);line-height:.98;font-weight:800;letter-spacing:-.045em}
+.h-lg{font-size:clamp(40px,6.4vw,72px);line-height:1.04;font-weight:700;letter-spacing:-.035em}
+.sub{font-size:clamp(19px,2.2vw,24px);line-height:1.4;color:var(--ink-muted);font-weight:500;max-width:680px}
+.soft{background:var(--bg-soft)}
+@media (max-width:600px){section{padding-block:80px}}
 
-/* demo board */
-.demo{position:relative;height:420px;border-radius:var(--radius-xl);background:var(--surface);box-shadow:var(--shadow-float);overflow:hidden;touch-action:none}
-.demo-canvas{position:absolute;inset:0;background-color:var(--canvas-bg)}
-.demo-bar{position:absolute;left:12px;top:12px;right:12px;display:flex;align-items:center;gap:8px;z-index:5;pointer-events:none}
-.demo-chip{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;border-radius:9px;background:var(--surface);box-shadow:var(--shadow-float);font:500 12px/1 var(--font-sans);color:var(--ink)}
-.demo-chip.ok{color:var(--success)}
-.col-label{position:absolute;top:66px;font:700 13px/1 var(--font-sans);color:var(--ink)}
-.sticky{position:absolute;width:31%;max-width:170px;min-height:92px;padding:12px;font:400 13px/1.4 var(--font-sans);color:var(--sticky-ink);box-shadow:var(--shadow-sticky);cursor:grab;user-select:none;display:flex;flex-direction:column;gap:6px;border:0;text-align:left}
-.sticky:active{cursor:grabbing}
-.sticky small{margin-top:auto;font-size:11px;opacity:.7}
-.sticky.dragging{box-shadow:0 12px 28px rgba(0,0,0,.22);transform:rotate(-1.5deg);z-index:4}
-.s-yellow{background:var(--sticky-yellow)}.s-coral{background:var(--sticky-coral)}.s-blue{background:var(--sticky-blue)}.s-green{background:var(--sticky-green)}.s-lilac{background:var(--sticky-lilac)}
+.hero{padding-block:72px 40px;text-align:center}
+.hero .head{margin-bottom:28px}
+.hero .tag{font-size:clamp(26px,3.6vw,40px);line-height:1.15;font-weight:600;letter-spacing:-.02em}
+.cta{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:center;margin-top:8px}
+.fine{font-size:14px;color:var(--ink-muted);margin-top:12px}
+
+.window{position:relative;margin:48px auto 0;max-width:1080px;border-radius:16px;background:var(--surface);box-shadow:var(--shadow-window);overflow:hidden;text-align:left}
+.titlebar{height:38px;display:flex;align-items:center;gap:8px;padding:0 14px;background:#fbfbfb;border-bottom:1px solid var(--border)}
+.titlebar i{width:11px;height:11px;border-radius:99px;background:#dcdce0}
+.titlebar span{margin-left:10px;font-size:12px;color:var(--ink-muted);font-weight:500}
+.board{position:relative;height:560px;overflow:hidden;touch-action:none}
+.outline{position:absolute;left:14px;top:14px;bottom:14px;width:200px;background:var(--surface);border-radius:12px;box-shadow:var(--shadow-float);padding:12px;display:flex;flex-direction:column;gap:4px;font-size:12px;z-index:3}
+.outline b{font-size:11px;letter-spacing:.06em;color:var(--ink-muted);margin:4px 6px 6px}
+.outline span{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px}
+.outline span.on{background:var(--accent-soft);color:var(--accent-soft-ink);font-weight:600}
+.outline i{width:8px;height:8px;border-radius:3px;flex-shrink:0}
+.frame{position:absolute;left:240px;right:24px;top:44px;height:330px;background:var(--surface);border-radius:8px;box-shadow:0 0 0 1px var(--border)}
+.frame-title{position:absolute;left:0;top:-22px;font-size:12px;font-weight:600;color:var(--ink-muted)}
+.col-h{position:absolute;top:16px;font-size:13px;font-weight:700}
+.sticky{position:absolute;width:30%;max-width:190px;min-height:92px;padding:12px;border:0;text-align:left;font:400 13px/1.4 var(--font);color:#18181b;box-shadow:var(--shadow-sticky);cursor:grab;user-select:none;display:flex;flex-direction:column;gap:6px}
+.sticky small{margin-top:auto;font-size:11px;opacity:.65}
+.sticky.dragging{cursor:grabbing;box-shadow:0 14px 30px rgba(0,0,0,.2);transform:rotate(-1.5deg);z-index:5}
 .sticky.ghost{opacity:.55;outline:1.5px dashed var(--accent);box-shadow:none;cursor:pointer}
-.agent-toast{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;border-radius:10px;background:var(--ink);color:var(--canvas-bg);font:500 13px/1 var(--font-sans);white-space:nowrap;z-index:6}
-.agent-toast button{height:28px;padding:0 10px;border:0;border-radius:7px;background:var(--accent);color:var(--accent-ink);font:600 12px/1 var(--font-sans);cursor:pointer}
-.agent-toast kbd{font:600 11px/1 var(--font-sans);padding:4px 6px;border-radius:5px;background:rgba(127,127,127,.3)}
-.demo-hint{position:absolute;right:12px;bottom:58px;font-size:12px;color:var(--ink-muted);z-index:5}
-@media (max-width:480px){.demo{height:440px}.agent-toast{font-size:12px}}
+.y{background:var(--s-yellow)}.c{background:var(--s-coral)}.bl{background:var(--s-blue)}.g{background:var(--s-green)}.l{background:var(--s-lilac)}
+.cursor{position:absolute;display:flex;align-items:flex-start;gap:2px;pointer-events:none;z-index:6;transition:transform 1.4s cubic-bezier(.2,0,0,1)}
+.cursor em{margin-top:14px;padding:2px 8px;border-radius:6px;color:#fff;font:600 11px/1.5 var(--font);font-style:normal;white-space:nowrap}
+.dock{position:absolute;left:50%;bottom:16px;transform:translateX(calc(-50% + 110px));display:flex;gap:2px;padding:5px;background:var(--surface);border-radius:14px;box-shadow:var(--shadow-float);z-index:3}
+.dock span{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#27272a}
+.dock span.on{background:var(--accent-soft);color:var(--accent)}
+.dock .agent{width:auto;padding:0 12px;background:var(--ink);color:#fff;font-size:12px;font-weight:600;gap:6px}
+.toast{position:absolute;left:calc(50% + 110px);transform:translateX(-50%);bottom:76px;display:flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;border-radius:10px;background:var(--ink);color:#fff;font:500 13px/1 var(--font);white-space:nowrap;z-index:6}
+.toast button{height:28px;padding:0 10px;border:0;border-radius:7px;background:var(--accent);color:#fff;font:600 12px/1 var(--font);cursor:pointer}
+.toast kbd{font:600 11px/1 var(--font);padding:3px 5px;border-radius:4px;background:rgba(255,255,255,.2)}
+.status{position:absolute;right:16px;top:12px;display:flex;gap:6px;z-index:3}
+.status span{display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 10px;border-radius:999px;background:var(--surface);box-shadow:var(--shadow-float);font-size:12px;font-weight:500}
+.status .ok{color:var(--success)}
+@media (max-width:820px){
+  .outline,.dock{display:none}
+  .frame{left:12px;right:12px;top:52px;height:340px}
+  .toast{left:50%}
+  .board{height:470px}
+  .sticky{width:30%;font-size:12px;padding:9px}
+}
 
-/* promises */
-.promises{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-@media (max-width:760px){.promises{grid-template-columns:minmax(0,1fr)}}
-.promise{padding:22px;border-radius:var(--radius-lg);background:var(--surface);box-shadow:var(--shadow-float);display:flex;flex-direction:column;gap:6px}
-.promise strong{font-size:20px;letter-spacing:-.01em}
-.promise span{color:var(--ink-muted);font-size:15px}
+.speed-wrap{position:relative;max-width:1080px;margin:0 auto;border-radius:20px;overflow:hidden;background:var(--canvas);box-shadow:0 0 0 1px var(--border)}
+#speed{display:block;width:100%;height:440px}
+.speed-badge{position:absolute;left:16px;bottom:16px;display:flex;gap:8px}
+.speed-badge span{height:30px;padding:0 12px;border-radius:999px;background:var(--surface);box-shadow:var(--shadow-float);display:inline-flex;align-items:center;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;max-width:900px;margin:56px auto 0;text-align:center}
+.stat b{display:block;font-size:clamp(36px,5vw,56px);font-weight:700;letter-spacing:-.03em;line-height:1.05}
+.stat span{color:var(--ink-muted);font-size:16px}
+.foot{font-size:12px;color:var(--ink-muted);text-align:center;margin-top:24px}
+@media (max-width:600px){.stats{grid-template-columns:minmax(0,1fr)}#speed{height:340px}}
 
-/* features */
-.features{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-@media (max-width:940px){.features{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:600px){.features{grid-template-columns:minmax(0,1fr)}}
-.feature{padding:22px;border-radius:var(--radius-lg);background:var(--surface);border:1px solid var(--border);display:flex;flex-direction:column;gap:10px}
-.feature .ic{width:40px;height:40px;border-radius:10px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center}
-.feature h3{font-size:18px;font-weight:600}
-.feature p{color:var(--ink-muted);font-size:15px}
-.tag{display:inline-flex;align-self:flex-start;height:22px;align-items:center;padding:0 8px;border-radius:6px;background:var(--surface-muted);color:var(--ink-muted);font:500 12px/1 var(--font-sans)}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;max-width:1080px;margin:0 auto}
+@media (max-width:800px){.pair{grid-template-columns:minmax(0,1fr)}}
+.panel{border-radius:20px;overflow:hidden;box-shadow:0 0 0 1px var(--border);background:var(--surface)}
+.panel-cap{display:flex;justify-content:space-between;padding:14px 18px;font-size:14px;font-weight:600;border-bottom:1px solid var(--border)}
+.panel-cap span{color:var(--ink-muted);font-weight:500}
+.zin{height:340px;position:relative}
+.zin .mini{position:absolute;width:26%;height:84px;padding:10px;font-size:12px;line-height:1.35;color:#18181b;box-shadow:var(--shadow-sticky);overflow:hidden}
+.zout{height:340px;padding:22px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;background:var(--bg-soft)}
+.card{border-radius:14px;background:var(--surface);box-shadow:0 0 0 1px var(--border);padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card h4{margin:0;font-size:20px;letter-spacing:-.02em}
+.card p{font-size:13px;color:var(--ink-muted)}
+.bar{display:flex;height:10px;border-radius:99px;overflow:hidden;margin-top:auto}
 
-/* agent */
-.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center}
-@media (max-width:900px){.split{grid-template-columns:minmax(0,1fr)}}
-.checks{display:flex;flex-direction:column;gap:16px;margin-top:8px;padding:0;list-style:none}
-.checks li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px}
-.checks .ck{width:28px;height:28px;border-radius:8px;background:var(--success-soft);color:var(--success);display:flex;align-items:center;justify-content:center}
-.checks b{display:block;font-weight:600}
-.checks span{color:var(--ink-muted);font-size:15px}
-.panel{border-radius:var(--radius-xl);background:var(--surface);box-shadow:var(--shadow-float);overflow:hidden}
-.panel-head{display:flex;align-items:center;gap:10px;height:52px;padding:0 16px;border-bottom:1px solid var(--border);font:700 13px/1 var(--font-sans);letter-spacing:.04em}
-.panel-head .model{margin-left:auto;font:500 12px/1 var(--font-sans);letter-spacing:0;color:var(--ink-muted);padding:6px 8px;border:1px solid var(--border);border-radius:7px}
-.ask{margin:16px;padding:10px 12px;border-radius:12px 12px 4px 12px;background:var(--surface-muted);font-size:14px;line-height:1.45;margin-left:auto;max-width:85%}
-.steps{margin:0 16px;border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.step{display:flex;align-items:center;gap:10px;padding:10px 12px;border-top:1px solid var(--border);font-size:13px}
-.step:first-child{border-top:0}
-.step .m{width:18px;height:18px;border-radius:99px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font:700 10px/1 var(--font-sans)}
-.step.done .m{background:var(--success);color:var(--surface)}
-.step.run{background:var(--accent-soft)}
-.step.run .m{background:var(--accent);color:var(--accent-ink)}
-.step.todo .m{background:var(--border)}
-.step .t{font:400 12px/1.4 var(--font-mono);color:var(--accent-soft-ink)}
-.step .d{color:var(--ink-muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.approve{margin:14px 16px 16px;padding:12px;border-radius:12px;background:var(--warning-soft);color:var(--warning);font-size:13px;line-height:1.5;display:flex;flex-direction:column;gap:10px}
-.approve b{font-weight:600}
-.approve-row{display:flex;gap:8px;flex-wrap:wrap}
-.approve-row span{height:30px;padding:0 12px;border-radius:8px;display:inline-flex;align-items:center;font-weight:600;font-size:12px}
-.approve-row .y{background:var(--ink);color:var(--canvas-bg)}
-.approve-row .n{border:1px solid currentColor}
+.agent-stage{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px;max-width:1080px;margin:0 auto}
+@media (max-width:860px){.agent-stage{grid-template-columns:minmax(0,1fr)}}
+.flow{position:relative;height:420px;border-radius:20px;box-shadow:0 0 0 1px var(--border);overflow:hidden}
+.node{position:absolute;height:52px;padding:0 16px;border-radius:12px;border:2px solid var(--ink);background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;white-space:nowrap}
+.node.start{background:var(--ink);color:#fff;border-radius:999px}
+.node.new{border:2px dashed var(--accent);background:var(--accent-soft);color:var(--accent-soft-ink)}
+.flow svg{position:absolute;inset:0;width:100%;height:100%}
+.steps{border-radius:20px;box-shadow:0 0 0 1px var(--border);background:var(--surface);overflow:hidden;display:flex;flex-direction:column}
+.steps-h{padding:16px 18px;font-size:13px;font-weight:700;letter-spacing:.04em;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;gap:12px}
+.steps-h span{font-weight:500;letter-spacing:0;color:var(--ink-muted)}
+.step{display:flex;align-items:center;gap:10px;padding:12px 18px;border-top:1px solid var(--border);font-size:14px}
+.step:first-of-type{border-top:0}
+.step .m{width:20px;height:20px;border-radius:99px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}
+.done .m{background:#16a34a}.run{background:var(--accent-soft)}.run .m{background:var(--accent)}.todo .m{background:var(--border)}
+.step code{font:12px/1.4 var(--mono);color:var(--accent-soft-ink)}
+.step span{color:var(--ink-muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ask{margin:16px 18px;padding:12px;border-radius:12px;background:var(--warning-soft);color:var(--warning);font-size:13px;line-height:1.5}
+.ask b{display:block;margin-bottom:4px}
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;max-width:960px;margin:48px auto 0;text-align:center}
+.trio b{display:block;font-size:19px;margin-bottom:4px;letter-spacing:-.01em}
+.trio span{color:var(--ink-muted);font-size:16px}
+@media (max-width:700px){.trio{grid-template-columns:minmax(0,1fr)}}
 
-/* security band */
-.band{background:var(--surface)}
-.specs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-@media (max-width:600px){.specs{grid-template-columns:minmax(0,1fr)}}
-.spec{padding:16px;border-radius:var(--radius-lg);background:var(--canvas-bg);border:1px solid var(--border);display:flex;flex-direction:column;gap:6px}
-.spec .k{font:500 12px/1.4 var(--font-mono);color:var(--accent-soft-ink)}
-.spec .v{font-size:15px;font-weight:600}
-.spec .n{font-size:14px;color:var(--ink-muted)}
+.links{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:28px}
+.links span{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:999px;background:var(--surface);box-shadow:0 0 0 1px var(--border);font-size:14px;font-weight:500}
+.links i{width:8px;height:8px;border-radius:99px}
 
-/* roadmap */
-.roadmap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-@media (max-width:940px){.roadmap{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:520px){.roadmap{grid-template-columns:minmax(0,1fr)}}
-.phase{padding:20px;border-radius:var(--radius-lg);background:var(--surface);border:1px solid var(--border);display:flex;flex-direction:column;gap:10px}
-.phase.now{border:2px solid var(--accent);background:var(--accent-soft)}
-.phase .v{font:600 13px/1 var(--font-mono);color:var(--accent-soft-ink)}
-.phase h3{font-size:18px}
-.phase ul{margin:0;padding-left:18px;color:var(--ink-muted);font-size:14px;display:flex;flex-direction:column;gap:4px}
+.lock{width:96px;height:96px;border-radius:28px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
 
-/* integrations */
-.integrations{display:flex;flex-wrap:wrap;gap:10px}
-.int{display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 16px 0 12px;border-radius:12px;background:var(--surface);border:1px solid var(--border);font-weight:600;font-size:15px}
-.int .when{font:500 12px/1 var(--font-mono);color:var(--ink-muted)}
-.int.sdk{border-style:dashed;color:var(--accent-soft-ink)}
-.badge{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font:700 12px/1 var(--font-sans);background:var(--surface-muted);color:var(--ink)}
+.grid6{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;max-width:1080px;margin:0 auto}
+@media (max-width:860px){.grid6{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.grid6{grid-template-columns:minmax(0,1fr)}}
+.tile{border-radius:20px;background:var(--surface);padding:28px;display:flex;flex-direction:column;gap:10px;min-height:200px}
+.tile .ic{width:44px;height:44px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center}
+.tile h3{font-size:22px;letter-spacing:-.02em}
+.tile p{color:var(--ink-muted);font-size:16px}
 
-/* pricing */
-.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-@media (max-width:900px){.plans{grid-template-columns:minmax(0,1fr)}}
-.plan{padding:26px;border-radius:var(--radius-xl);background:var(--surface);border:1px solid var(--border);display:flex;flex-direction:column;gap:14px}
-.plan.feat{border:2px solid var(--accent)}
-.plan h3{font-size:20px}
-.price{display:flex;align-items:baseline;gap:6px}
-.price b{font-size:40px;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
-.price span{color:var(--ink-muted);font-size:14px}
-.plan ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;font-size:15px}
-.plan li{display:grid;grid-template-columns:18px minmax(0,1fr);gap:10px}
-.plan li svg{margin-top:4px;color:var(--success)}
-.plan .note{font-size:13px;color:var(--ink-muted);margin-top:auto}
-.plan .btn{justify-content:center}
+.strip{display:flex;gap:16px;overflow-x:auto;padding:4px 4px 16px;scroll-snap-type:x mandatory;max-width:1080px;margin:0 auto}
+.tpl{flex:0 0 220px;scroll-snap-align:start;border-radius:16px;background:var(--surface);box-shadow:0 0 0 1px var(--border);overflow:hidden}
+.tpl .art{height:140px;position:relative}
+.tpl .art i{position:absolute;border-radius:2px}
+.tpl p{padding:12px 14px;font-size:15px;font-weight:600}
 
-/* comparison */
-.cmp-wrap{overflow-x:auto;border-radius:var(--radius-xl);background:var(--surface);box-shadow:var(--shadow-float)}
-.cmp{width:100%;min-width:560px;border-collapse:collapse;font-size:15px}
-.cmp th,.cmp td{padding:14px 18px;text-align:left;vertical-align:top;border-top:1px solid var(--border)}
-.cmp thead th{border-top:0;font-size:13px;font-weight:600;color:var(--ink-muted);background:var(--surface-muted)}
-.cmp thead th.us{color:var(--accent-ink);background:var(--accent)}
-.cmp tbody th{font-weight:600;white-space:nowrap;width:120px}
-.cmp td{color:var(--ink-muted)}
-.cmp td.us{color:var(--ink);font-weight:500;background:var(--accent-soft)}
-
-/* faq */
-.faq{max-width:780px;display:flex;flex-direction:column;gap:10px}
-.faq details{border-radius:var(--radius-lg);background:var(--surface);border:1px solid var(--border);padding:0 18px}
-.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;padding-block:16px;font-weight:600;font-size:16px}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";font-weight:400;font-size:22px;line-height:1;color:var(--ink-muted)}
-.faq details[open] summary::after{content:"\2212"}
-.faq details p{padding-bottom:16px;color:var(--ink-muted);font-size:15px;max-width:65ch}
-
-/* footer */
-.final{border-radius:var(--radius-xl);background:var(--ink);color:var(--canvas-bg);padding:48px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px}
-.final h2{font-size:clamp(26px,3.6vw,36px)}
-.final p{opacity:.75;margin-top:8px}
-.final .btn-primary{background:var(--canvas-bg);color:var(--ink)}
-@media (max-width:600px){.final{padding:28px}}
-footer{padding-block:40px 56px;color:var(--ink-muted);font-size:14px}
-.foot{display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between}
-.foot nav{display:flex;flex-wrap:wrap;gap:18px}
-.foot nav a{color:var(--ink-muted)}
+.final{text-align:center}
+footer{border-top:1px solid var(--border);padding-block:28px 48px;color:var(--ink-muted);font-size:12px}
+.foot-in{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
+.foot-in nav{display:flex;flex-wrap:wrap;gap:18px}
+.foot-in nav a{color:var(--ink-muted)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
 
 <header class="nav">
-  <div class="wrap">
-    <div class="nav-in">
-      <a class="logo" href="#top" aria-label="Oriw home">
-        <span class="logo-mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2.4" aria-hidden="true"><circle cx="12" cy="12" r="7"></circle><circle class="core" cx="12" cy="12" r="2"></circle></svg></span>Oriw
-      </a>
-      <nav class="nav-links" aria-label="Sections">
-        <a href="#compare">Why switch</a>
-        <a href="#features">Features</a>
-        <a href="#agent">AI agent</a>
-        <a href="#security">Security</a>
-        <a href="#roadmap">Roadmap</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#faq">FAQ</a>
-      </nav>
-      <span class="nav-spacer"></span>
-      <a class="btn btn-secondary" data-link="repo" href="#">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"></path></svg>Star on GitHub</a>
-      <a class="btn btn-primary" data-link="releases" href="#">Download</a>
-    </div>
+  <div class="wrap nav-in">
+    <a class="logo" href="#top" aria-label="Oriw home"><span class="mark"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" aria-hidden="true"><circle cx="12" cy="12" r="7"></circle><circle cx="12" cy="12" r="2" fill="#fff"></circle></svg></span>Oriw</a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#speed-sec">Speed</a><a href="#zoom-sec">Zoom</a><a href="#agent-sec">AI agent</a><a href="#together-sec">Together</a><a href="#privacy-sec">Privacy</a>
+    </nav>
+    <a class="btn btn-primary" data-link="releases" href="#">Download</a>
   </div>
 </header>
 
 <main id="top">
-  <section class="hero dots">
-    <div class="wrap hero-grid">
-      <div>
-        <span class="pill"><span class="dot"></span>Public preview · v0.1.9 · Open source (AGPL-3.0)</span>
-        <h1>Everything you need a whiteboard for. <em>None of the seat bills.</em></h1>
-        <p class="lede">Oriw is the open-source whiteboard for teams tired of per-seat pricing and slow, cloud-locked boards. It stays smooth on huge boards, works offline, keeps every board encrypted on your device, and has an AI agent that runs on the model you choose. Viewers are always free.</p>
-        <div class="cta-row">
-          <a class="btn btn-primary" data-link="releases" href="#" id="dl-btn">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"></path><path d="M7 10l5 5 5-5"></path><path d="M5 21h14"></path></svg><span id="dl-label">Download for desktop</span></a>
-          <a class="btn btn-secondary" data-link="repo" href="#">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18l6-6-6-6"></path><path d="M8 6l-6 6 6 6"></path></svg>View the source</a>
-        </div>
-        <p class="fine">Windows, macOS and Linux · about 10 MB · works fully offline · no account needed</p>
-      </div>
-
-      <div class="demo" id="demo" aria-label="Interactive demo board: drag the sticky notes, accept the agent's suggestion">
-        <div class="demo-canvas dots"></div>
-        <div class="demo-bar">
-          <span class="demo-chip">Sprint 42 retro</span>
-          <span class="demo-chip ok"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>Encrypted</span>
-        </div>
-        <span class="col-label" style="left:4%">Went well</span>
-        <span class="col-label" style="left:36%">To improve</span>
-        <span class="col-label" style="left:68%">Actions</span>
-        <button class="sticky s-yellow" style="left:4%;top:90px">Encrypted autosave shipped<small>Arun · 3 votes</small></button>
-        <button class="sticky s-green" style="left:4%;top:200px">Review under a day<small>Priya</small></button>
-        <button class="sticky s-coral" style="left:36%;top:90px">Large boards slow to open<small>Thiru · 5 votes</small></button>
-        <button class="sticky s-coral" style="left:36%;top:200px">Bug owners unclear<small>Meena</small></button>
-        <button class="sticky s-blue" style="left:68%;top:90px">Set a 1 s load budget<small>Due Fri</small></button>
-        <button class="sticky s-blue ghost" id="ghost" style="left:68%;top:200px">Weekly bug-owner rota<small>Suggested by agent</small></button>
-        <span class="demo-hint" id="demo-hint">Drag any sticky</span>
-        <div class="agent-toast" id="agent-toast" role="status">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"></path></svg>
-          <span id="toast-text">Agent suggests an action item</span>
-          <button type="button" id="accept">Accept <kbd>Tab</kbd></button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" style="padding-block:24px 8px">
-    <div class="wrap promises">
-      <div class="promise"><strong>No seats</strong><span>Viewers are free and you never get billed for someone you shared a board with.</span></div>
-      <div class="promise"><strong>No AI credits</strong><span>Use your own Claude key or a local Llama model. Unlimited, and you see the cost first.</span></div>
-      <div class="promise"><strong>No lock-in</strong><span>An open, documented file format and full-resolution export. Leave whenever you like.</span></div>
-    </div>
-  </section>
-
-
-  <section class="section" id="compare" style="padding-block:72px 8px">
+  <section class="hero">
     <div class="wrap">
-      <span class="frame-label">Frame · Why teams switch</span>
-      <div class="section-head">
-        <h2>What changes when you switch to Oriw</h2>
-        <p>The things people complain about most in cloud whiteboards, fixed by design.</p>
-      </div>
-      <div class="cmp-wrap">
-        <table class="cmp">
-          <thead><tr><th scope="col"></th><th scope="col">Typical cloud whiteboard</th><th scope="col" class="us">Oriw</th></tr></thead>
-          <tbody>
-            <tr><th scope="row">Pricing</th><td>Per-seat billing; sharing can add paid seats</td><td class="us">No seats. Viewers always free</td></tr>
-            <tr><th scope="row">Free plan</th><td>A handful of editable boards</td><td class="us">Unlimited boards, forever</td></tr>
-            <tr><th scope="row">Big boards</th><td>Slow down as boards grow</td><td class="us">Built to stay smooth past 10,000 objects</td></tr>
-            <tr><th scope="row">Offline</th><td>Needs an internet connection</td><td class="us">Works fully offline</td></tr>
-            <tr><th scope="row">AI</th><td>Metered credits, cost shown after</td><td class="us">Your own model or a local one, cost shown first</td></tr>
-            <tr><th scope="row">Your data</th><td>Stored on the vendor's servers</td><td class="us">Encrypted on your device</td></tr>
-            <tr><th scope="row">Workshops</th><td>Timer and voting on paid plans</td><td class="us">Timer and voting free</td></tr>
-            <tr><th scope="row">Leaving</th><td>Limited, low-resolution export</td><td class="us">Open .oriw format, full-resolution export</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="features">
-    <div class="wrap">
-      <span class="frame-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M7 3v18"></path><path d="M17 3v18"></path><path d="M3 7h18"></path><path d="M3 17h18"></path></svg>Frame · Canvas</span>
-      <div class="section-head">
-        <h2>Everything a workshop needs, none of the bloat</h2>
-        <p>The tools teams use every day, built to stay fast on boards with tens of thousands of objects.</p>
-      </div>
-      <div class="features">
-        <article class="feature"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v11l-5 5H4z"></path><path d="M15 20v-5h5"></path></svg></span><h3>Infinite canvas</h3><p>Stickies, shapes, connectors that stay attached, pen, frames and images, with snapping and a minimap.</p></article>
-        <article class="feature"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg></span><h3>Templates</h3><p>Retro, kanban, mind map, flowchart and user story map, ready in one click or one slash command.</p></article>
-        <article class="feature"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2 2"></path><path d="M10 2h4"></path></svg></span><h3>Timer and voting, free</h3><p>Run workshops without upgrading. Dot voting and a shared timer are part of the free app.</p></article>
-        <article class="feature"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path><path d="M8 11h6"></path></svg></span><h3>Semantic zoom</h3><p>Zoom out and frames turn into readable summaries instead of unreadable specks.</p></article>
-        <article class="feature"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16"></path><path d="M4 12h10"></path><path d="M4 18h14"></path></svg></span><h3>Outline and search</h3><p>Every frame in a navigable outline. Jump to anything with Ctrl P, across all your boards.</p></article>
-        <article class="feature"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"></path><path d="M7 10l5 5 5-5"></path><path d="M5 21h14"></path></svg></span><h3>Export anything</h3><p>Full-resolution PNG, SVG and PDF, print tiling for wall posters, and the open .oriw format.</p></article>
-      </div>
-    </div>
-  </section>
-
-  <section class="section dots" id="agent">
-    <div class="wrap split">
-      <div>
-        <span class="frame-label">Frame · AI agent</span>
-        <div class="section-head" style="margin-bottom:24px">
-          <h2>An agent that does the work, with the model you choose</h2>
-          <p>Describe the board you want. The agent draws it, step by step, and asks before anything risky.</p>
+      <div class="head">
+        <span class="eyebrow">Public preview</span>
+        <h1 class="h-xl">Oriw</h1>
+        <p class="tag">Think big. Stay fast. Keep it yours.</p>
+        <div class="cta">
+          <a class="btn btn-primary" data-link="releases" href="#" id="dl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"></path><path d="M7 10l5 5 5-5"></path><path d="M5 21h14"></path></svg><span id="dl-label">Download free</span></a>
+          <a class="link-more" data-link="repo" href="#">View on GitHub</a>
         </div>
-        <ul class="checks">
-          <li><span class="ck"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span><div><b>Your model, your bill</b><span>Claude with your own key, or Llama through Ollama running on your laptop.</span></div></li>
-          <li><span class="ck"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span><div><b>You see what leaves the device</b><span>A payload preview before any cloud call. Local models send nothing at all.</span></div></li>
-          <li><span class="ck"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span><div><b>Approvals and checkpoints</b><span>Deletes wait for your OK, and every run can be rolled back in one click.</span></div></li>
-          <li><span class="ck"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span><div><b>Off with one switch</b><span>Prefer no AI? Turn it off and it stays out of your way.</span></div></li>
-        </ul>
+        <p class="fine">Windows, macOS and Linux. Open source.</p>
       </div>
-      <div class="panel" aria-label="Example agent run">
-        <div class="panel-head">AGENT <span class="model">Llama 3 · local</span></div>
-        <p class="ask">Build a checkout user flow from the analytics notes and add a 3-D Secure branch.</p>
-        <div class="steps">
-          <div class="step done"><span class="m">✓</span><span class="t">read_frame</span><span class="d">Analytics · 31 items</span></div>
-          <div class="step done"><span class="m">✓</span><span class="t">add_shapes</span><span class="d">6 steps + 1 decision</span></div>
-          <div class="step done"><span class="m">✓</span><span class="t">connect</span><span class="d">6 connectors, left to right</span></div>
-          <div class="step run"><span class="m">•</span><span class="t">add_branch</span><span class="d">3-D Secure from Payment</span></div>
-          <div class="step todo"><span class="m"></span><span class="t">delete</span><span class="d">4 duplicate stickies</span></div>
-        </div>
-        <div class="approve"><span><b>Approval needed.</b> The agent wants to delete 4 duplicate stickies.</span><span class="approve-row"><span class="y">Allow</span><span class="n">Skip</span></span></div>
-      </div>
-    </div>
-  </section>
 
-  <section class="section band" id="security">
-    <div class="wrap">
-      <span class="frame-label">Frame · Security</span>
-      <div class="section-head">
-        <h2>Private by design, and you can check</h2>
-        <p>Boards are plaintext only in memory while unlocked. Everything on disk, in backups and on the wire is encrypted, and the code is open for anyone to audit.</p>
-      </div>
-      <div class="specs">
-        <div class="spec"><span class="k">XChaCha20-Poly1305 · Argon2id</span><span class="v">Encrypted vault</span><span class="n">A passphrase-protected vault with a 24-word recovery key and auto-lock.</span></div>
-        <div class="spec"><span class="k">drive.file · sealed before upload</span><span class="v">Zero-knowledge backups</span><span class="n">Google Drive stores only ciphertext, in files Oriw created, nothing else.</span></div>
-        <div class="spec"><span class="k">OAuth + PKCE · OS keychain</span><span class="v">No passwords, no tokens in the UI</span><span class="n">Sign-in runs in your browser; tokens live in Windows, macOS or Linux secure storage.</span></div>
-        <div class="spec"><span class="k">policy file · signed updates</span><span class="v">Ready for IT</span><span class="n">Admins can force local-only AI, set the backup target and push settings to every laptop.</span></div>
-      </div>
-      <p style="margin-top:20px;font-size:15px">Found a vulnerability? <a data-link="security" href="#">Read the security policy</a>.</p>
-    </div>
-  </section>
-
-  <section class="section" id="roadmap">
-    <div class="wrap">
-      <span class="frame-label">Frame · Roadmap</span>
-      <div class="section-head">
-        <h2>Collaboration without a central server</h2>
-        <p>Live sessions arrive next, end-to-end encrypted, with no Oriw server in the middle.</p>
-      </div>
-      <div class="roadmap">
-        <div class="phase now"><span class="v">0.1.9 · now</span><h3>Private core</h3><ul><li>Canvas and templates</li><li>Encrypted vault</li><li>Drive backup</li><li>AI agent preview</li></ul></div>
-        <div class="phase"><span class="v">0.2</span><h3>Live sessions</h3><ul><li>Host a session by link</li><li>Join on the same network</li><li>Free view links</li></ul></div>
-        <div class="phase"><span class="v">0.3</span><h3>Teams</h3><ul><li>Self-hosted team server</li><li>SSO and SCIM</li><li>Integrations and extensions</li></ul></div>
-        <div class="phase"><span class="v">0.4</span><h3>Sync anywhere</h3><ul><li>Shared Drive folders</li><li>Optional Oriw Cloud relay</li><li>Peer-to-peer mode</li></ul></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section dots" id="integrations">
-    <div class="wrap">
-      <span class="frame-label">Frame · Integrations</span>
-      <div class="section-head">
-        <h2>Free integrations, open to everyone</h2>
-        <p>Every integration uses the same public extension SDK, so you can build your own.</p>
-      </div>
-      <div class="integrations">
-        <span class="int"><span class="badge">G</span>Google Drive <span class="when">now</span></span>
-        <span class="int"><span class="badge">GH</span>GitHub <span class="when">0.3</span></span>
-        <span class="int"><span class="badge">J</span>Jira <span class="when">0.3</span></span>
-        <span class="int"><span class="badge">S</span>Slack <span class="when">0.3</span></span>
-        <span class="int"><span class="badge">G</span>Google Calendar <span class="when">0.3</span></span>
-        <span class="int"><span class="badge">T</span>Microsoft Teams <span class="when">0.4</span></span>
-        <span class="int"><span class="badge">Z</span>Zoom <span class="when">0.4</span></span>
-        <span class="int sdk"><span class="badge">+</span>Build your own <span class="when">SDK</span></span>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="pricing">
-    <div class="wrap">
-      <span class="frame-label">Frame · Pricing</span>
-      <div class="section-head">
-        <h2>Free for people. Fair for companies.</h2>
-        <p>You only pay for active editors. Viewers are always free.</p>
-      </div>
-      <div class="plans">
-        <div class="plan">
-          <h3>Community</h3>
-          <div class="price"><b>$0</b><span>forever</span></div>
-          <ul>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>The full desktop app, unlimited boards</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>AI agent with your own model</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>Live sessions and self-hosted server</li>
-          </ul>
-          <a class="btn btn-secondary" data-link="releases" href="#">Download</a>
-        </div>
-        <div class="plan feat">
-          <h3>Team</h3>
-          <div class="price"><b>$2</b><span>per editor / month, billed yearly</span></div>
-          <ul>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>Everything in Community</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>Oriw Cloud relay, zero setup</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>Always-on sync for your team</li>
-          </ul>
-          <p class="note">Coming with 0.4</p>
-          <a class="btn btn-primary" data-link="waitlist" href="#">Join the waitlist</a>
-        </div>
-        <div class="plan">
-          <h3>Enterprise</h3>
-          <div class="price"><b>$4</b><span>per editor / month, from $3,000 a year</span></div>
-          <ul>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>SSO, SCIM and audit log forwarding</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>Sensitivity labels and admin console</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>Support agreement and security reviews</li>
-          </ul>
-          <p class="note">Coming with 0.3</p>
-          <a class="btn btn-secondary" data-link="contact" href="#">Talk to us</a>
+      <div class="window" aria-label="Interactive Oriw board: drag the notes and accept the agent's suggestion">
+        <div class="titlebar"><i></i><i></i><i></i><span>Sprint 42 retro</span></div>
+        <div class="board dots" id="board" tabindex="0">
+          <div class="outline" aria-hidden="true">
+            <b>OUTLINE</b>
+            <span class="on"><i style="background:#e5484d"></i>Retro · Sprint 42</span>
+            <span><i style="background:#4f46e5"></i>Q4 roadmap</span>
+            <span><i style="background:#22a06b"></i>User journey</span>
+            <span><i style="background:#71717a"></i>Architecture</span>
+          </div>
+          <div class="status" aria-hidden="true"><span class="ok">● Encrypted</span><span>Live · 3</span></div>
+          <div class="frame" id="frame">
+            <span class="frame-title">Frame · Retro</span>
+            <span class="col-h" style="left:3%">Went well</span>
+            <span class="col-h" style="left:35%">To improve</span>
+            <span class="col-h" style="left:67%">Actions</span>
+            <button class="sticky y" style="left:3%;top:46px">Encrypted autosave shipped<small>Arun · 3 votes</small></button>
+            <button class="sticky g" style="left:3%;top:150px">Review under a day<small>Priya</small></button>
+            <button class="sticky c" style="left:35%;top:46px">Large boards slow to open<small>5 votes</small></button>
+            <button class="sticky c" style="left:35%;top:150px">Bug owners unclear<small>Meena</small></button>
+            <button class="sticky bl" style="left:67%;top:46px">Set a 1 s load budget<small>Due Fri</small></button>
+            <button class="sticky bl ghost" id="ghost" style="left:67%;top:150px">Weekly bug-owner rota<small>Suggested by agent</small></button>
+          </div>
+          <div class="cursor" id="cur1" style="left:0;top:0;transform:translate(560px,250px)" aria-hidden="true"><svg width="18" height="20" viewBox="0 0 20 22"><path d="M2 2 L18 10 L10 12 L7 20 z" fill="#db2777" stroke="#fff" stroke-width="1.5"></path></svg><em style="background:#db2777">Priya</em></div>
+          <div class="cursor" id="cur2" style="left:0;top:0;transform:translate(820px,120px)" aria-hidden="true"><svg width="18" height="20" viewBox="0 0 20 22"><path d="M2 2 L18 10 L10 12 L7 20 z" fill="#0d9488" stroke="#fff" stroke-width="1.5"></path></svg><em style="background:#0d9488">Arun</em></div>
+          <div class="toast" id="toast" role="status"><span id="toast-t">Agent suggests an action item</span><button type="button" id="accept">Accept <kbd>Tab</kbd></button></div>
+          <div class="dock" aria-hidden="true">
+            <span class="on"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 3l14 8-6 2-2 6z"></path></svg></span>
+            <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 4h16v11l-5 5H4z"></path></svg></span>
+            <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8"></rect><circle cx="16.5" cy="16.5" r="4.5"></circle></svg></span>
+            <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 6V4h14v2"></path><path d="M12 4v16"></path></svg></span>
+            <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 19L19 5"></path><path d="M12 5h7v7"></path></svg></span>
+            <span class="agent">✦ Agent</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section" id="faq" style="padding-top:0">
+  <section id="speed-sec">
     <div class="wrap">
-      <span class="frame-label">Frame · FAQ</span>
-      <div class="section-head" style="margin-bottom:24px"><h2>Questions</h2></div>
-      <div class="faq">
-        <details><summary>Is Oriw really free?</summary><p>Yes. The desktop app is open source under AGPL-3.0 and free forever, with unlimited boards. Companies pay only for enterprise features like SSO and a support agreement, or for the optional hosted relay.</p></details>
-        <details><summary>Where are my boards stored?</summary><p>On your computer, inside an encrypted vault. If you turn on Google Drive backup, Oriw encrypts each board before upload, so Google stores only files it cannot read.</p></details>
-        <details><summary>Which AI models can I use?</summary><p>Claude with your own API key, or Llama running locally through Ollama. With a local model, nothing leaves your device. You can also turn AI off completely.</p></details>
-        <details><summary>Can my team work on the same board?</summary><p>Live sessions arrive in 0.2: share an invite link and edit together, end-to-end encrypted. A self-hosted team server follows in 0.3.</p></details>
-        <details><summary>How do you say Oriw?</summary><p>OR-ee-w. It's a made-up word, so it means whatever you build on it.</p></details>
-        <details><summary>Can I bring my existing boards?</summary><p>An importer for files you export from other whiteboards is on the roadmap. Oriw's own format is open and documented, so your boards are never locked in.</p></details>
+      <div class="head">
+        <h2 class="h-lg">Fast. On any board.</h2>
+        <p class="sub">Ten thousand notes, smooth as the first one. Oriw draws only what you see, so big boards feel small.</p>
+      </div>
+      <div class="speed-wrap">
+        <canvas id="speed" aria-label="Animation: a board of 10,000 sticky notes zooming smoothly"></canvas>
+        <div class="speed-badge"><span>10,000 notes</span><span id="zoom-pct">100%</span></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>10,000+</b><span>objects, every frame smooth</span></div>
+        <div class="stat"><b>&lt; 1 s</b><span>to open a board</span></div>
+        <div class="stat"><b>~10 MB</b><span>download</span></div>
+      </div>
+      <p class="foot">Design targets for the 0.1.9 public preview.</p>
+    </div>
+  </section>
+
+  <section id="zoom-sec" class="soft">
+    <div class="wrap">
+      <div class="head">
+        <h2 class="h-lg">Zoom out. Still clear.</h2>
+        <p class="sub">Step back and every frame becomes a summary you can read, instead of a cloud of tiny specks.</p>
+      </div>
+      <div class="pair">
+        <div class="panel">
+          <div class="panel-cap">Up close <span>100%</span></div>
+          <div class="zin dots" aria-hidden="true">
+            <div class="mini y" style="left:6%;top:22px">Encrypted autosave shipped</div>
+            <div class="mini c" style="left:37%;top:22px">Large boards slow to open</div>
+            <div class="mini bl" style="left:68%;top:22px">Set a 1 s load budget</div>
+            <div class="mini g" style="left:6%;top:126px">Review under a day</div>
+            <div class="mini c" style="left:37%;top:126px">Bug owners unclear</div>
+            <div class="mini l" style="left:68%;top:126px">Workshop templates?</div>
+            <div class="mini y" style="left:6%;top:230px">Faster onboarding</div>
+            <div class="mini c" style="left:37%;top:230px">Flaky sync tests</div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-cap">Whole board <span>12%</span></div>
+          <div class="zout" aria-hidden="true">
+            <div class="card"><h4>Retro</h4><p>12 notes · top: slow board load</p><div class="bar"><i style="flex:4;background:#ffe066"></i><i style="flex:5;background:#ffb8a6"></i><i style="flex:3;background:#9cc8f5"></i></div></div>
+            <div class="card"><h4>Roadmap</h4><p>18 items · next: 0.1.9</p><div class="bar"><i style="flex:5;background:#818cf8"></i><i style="flex:3;background:#2dd4bf"></i><i style="flex:2;background:#fbbf24"></i></div></div>
+            <div class="card"><h4>Journey</h4><p>41 items · 9 pain points</p><div class="bar"><i style="flex:2;background:#4ade80"></i><i style="flex:3;background:#fbbf24"></i><i style="flex:4;background:#f87171"></i></div></div>
+            <div class="card"><h4>Architecture</h4><p>27 nodes · 4 groups</p><div class="bar"><i style="flex:1;background:#a1a1aa"></i><i style="flex:1;background:#d4d4d8"></i></div></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="wrap" style="padding-block:24px 0">
-    <div class="final">
-      <div><h2>Your boards. Your AI. Your call.</h2><p>Download the public preview and start a board in seconds.</p></div>
-      <a class="btn btn-primary" data-link="releases" href="#">Download Oriw</a>
+  <section id="agent-sec">
+    <div class="wrap">
+      <div class="head">
+        <h2 class="h-lg">An agent that does the work.</h2>
+        <p class="sub">Describe the board you need. Watch it build, step by step. Nothing risky happens without your OK.</p>
+      </div>
+      <div class="agent-stage">
+        <div class="flow dots" aria-hidden="true">
+          <svg viewBox="0 0 600 420" preserveAspectRatio="none"><g stroke="#52525b" stroke-width="2" fill="none"><path d="M120 96 H204"></path><path d="M300 96 H414"></path><path d="M466 122 V210"></path><path d="M414 236 H310" stroke="#4f46e5" stroke-dasharray="6 5"></path></g></svg>
+          <div class="node start" style="left:5%;top:70px">Cart</div>
+          <div class="node" style="left:34%;top:70px">Sign in</div>
+          <div class="node" style="left:69%;top:70px">Shipping</div>
+          <div class="node" style="left:69%;top:210px">Payment</div>
+          <div class="node new" style="left:30%;top:210px">3-D Secure</div>
+          <div class="sticky c" style="position:absolute;left:5%;top:310px;width:28%;cursor:default">Drop-off 38% at shipping</div>
+          <div class="sticky y" style="position:absolute;left:36%;top:310px;width:28%;cursor:default">Autofill from pincode</div>
+        </div>
+        <div class="steps" aria-label="Example agent run">
+          <div class="steps-h">AGENT <span>Llama 3 · on this device</span></div>
+          <div class="step done"><span class="m">✓</span><code>read_frame</code><span>Analytics notes</span></div>
+          <div class="step done"><span class="m">✓</span><code>add_shapes</code><span>4 steps</span></div>
+          <div class="step done"><span class="m">✓</span><code>connect</code><span>Left to right</span></div>
+          <div class="step run"><span class="m">•</span><code>add_branch</code><span>3-D Secure</span></div>
+          <div class="step todo"><span class="m"></span><code>delete</code><span>2 duplicates</span></div>
+          <div class="ask"><b>Approval needed</b>Delete 2 duplicate notes?</div>
+        </div>
+      </div>
+      <div class="trio">
+        <div><b>Your model.</b><span>Claude, Copilot, Gemini, or Llama on your own computer.</span></div>
+        <div><b>Always undoable.</b><span>Every run saves a checkpoint first.</span></div>
+        <div><b>Yours to switch off.</b><span>One switch, and AI is gone.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="together-sec" class="soft">
+    <div class="wrap">
+      <div class="head">
+        <h2 class="h-lg">Together. No cloud required.</h2>
+        <p class="sub">Share a link and edit live, end-to-end encrypted, straight between computers. Viewers are always free.</p>
+      </div>
+      <div class="window" style="margin-top:0">
+        <div class="titlebar"><i></i><i></i><i></i><span>Live session · encrypted</span></div>
+        <div class="board dots" style="height:360px" aria-hidden="true">
+          <div class="frame" style="left:24px;right:24px;top:40px;height:280px">
+            <span class="col-h" style="left:3%">Ideas</span>
+            <div class="sticky y" style="left:3%;top:46px;cursor:default;outline:2px solid #db2777;outline-offset:3px">Offline mode for field teams</div>
+            <div class="sticky l" style="left:35%;top:46px;cursor:default">Voice notes on stickies</div>
+            <div class="sticky g" style="left:67%;top:46px;cursor:default;outline:2px solid #0d9488;outline-offset:3px">Template gallery</div>
+            <div class="sticky" style="left:35%;top:156px;cursor:default;border:2px dashed #d97706;background:rgba(217,119,6,.06);box-shadow:none"></div>
+          </div>
+          <div class="cursor" style="left:12%;top:130px"><svg width="18" height="20" viewBox="0 0 20 22"><path d="M2 2 L18 10 L10 12 L7 20 z" fill="#db2777" stroke="#fff" stroke-width="1.5"></path></svg><em style="background:#db2777">Priya · typing</em></div>
+          <div class="cursor" style="left:76%;top:120px"><svg width="18" height="20" viewBox="0 0 20 22"><path d="M2 2 L18 10 L10 12 L7 20 z" fill="#0d9488" stroke="#fff" stroke-width="1.5"></path></svg><em style="background:#0d9488">Arun</em></div>
+          <div class="cursor" style="left:46%;top:250px"><svg width="18" height="20" viewBox="0 0 20 22"><path d="M2 2 L18 10 L10 12 L7 20 z" fill="#d97706" stroke="#fff" stroke-width="1.5"></path></svg><em style="background:#d97706">Meena · adding</em></div>
+        </div>
+      </div>
+      <div class="links">
+        <span><i style="background:#16a34a"></i>Direct, computer to computer</span>
+        <span><i style="background:#2563eb"></i>Same office network</span>
+        <span><i style="background:#d97706"></i>Encrypted relay when needed</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="privacy-sec">
+    <div class="wrap">
+      <div class="head">
+        <div class="lock"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg></div>
+        <h2 class="h-lg">Private by design.</h2>
+        <p class="sub">Your boards are encrypted on your device. Not on ours. Not on anyone's.</p>
+      </div>
+      <div class="trio" style="margin-top:0">
+        <div><b>No account to start.</b><span>Open Oriw and draw.</span></div>
+        <div><b>Backups only you can read.</b><span>Sealed before they reach Google Drive.</span></div>
+        <div><b>Open for anyone to check.</b><span>Every line of code is public.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="soft">
+    <div class="wrap">
+      <div class="head"><h2 class="h-lg">The essentials, done right.</h2></div>
+      <div class="grid6">
+        <div class="tile"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 2l20 20"></path><path d="M8.5 16.5a5 5 0 0 1 7 0"></path><path d="M5 13a10 10 0 0 1 5.2-2.8"></path><path d="M12 20h.01"></path></svg></span><h3>Works offline.</h3><p>On a plane, in a field, anywhere. Everything syncs when you're back.</p></div>
+        <div class="tile"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path><path d="M9 12l2 2 4-4"></path></svg></span><h3>Never loses work.</h3><p>Every change is saved the moment you make it, even if the power goes out.</p></div>
+        <div class="tile"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><path d="M17.5 14v7"></path><path d="M14 17.5h7"></path></svg></span><h3>Smart diagrams.</h3><p>One click tidies any flow. Connectors find their own way around shapes.</p></div>
+        <div class="tile"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2 2"></path><path d="M10 2h4"></path></svg></span><h3>Workshop tools.</h3><p>Timer and dot voting, built in and free.</p></div>
+        <div class="tile"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"></path><path d="M7 10l5 5 5-5"></path><path d="M5 21h14"></path></svg></span><h3>Export anything.</h3><p>Full-resolution images and PDFs, wall-sized prints, and an open file format.</p></div>
+        <div class="tile"><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="5" r="2"></circle><path d="M5 9h14"></path><path d="M12 9v12"></path><path d="M8 21l4-6 4 6"></path></svg></span><h3>Made for everyone.</h3><p>Works fully from the keyboard, with clear contrast and screen-reader labels.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="head">
+        <h2 class="h-lg">Start from something good.</h2>
+        <p class="sub">Templates made by the community, free to use and share.</p>
+      </div>
+      <div class="strip" aria-label="Templates">
+        <div class="tpl"><div class="art dots"><i style="left:12%;top:22%;width:22%;height:24%;background:#fff0a6"></i><i style="left:39%;top:22%;width:22%;height:24%;background:#ffd6cb"></i><i style="left:66%;top:22%;width:22%;height:24%;background:#cfe6ff"></i><i style="left:12%;top:54%;width:22%;height:24%;background:#c8f0d8"></i><i style="left:39%;top:54%;width:22%;height:24%;background:#ffd6cb"></i></div><p>Retrospective</p></div>
+        <div class="tpl"><div class="art dots"><i style="left:10%;top:16%;width:24%;height:68%;background:#ececee"></i><i style="left:38%;top:16%;width:24%;height:68%;background:#ececee"></i><i style="left:66%;top:16%;width:24%;height:68%;background:#ececee"></i><i style="left:13%;top:24%;width:18%;height:14%;background:#cfe6ff"></i><i style="left:13%;top:42%;width:18%;height:14%;background:#cfe6ff"></i><i style="left:41%;top:24%;width:18%;height:14%;background:#fff0a6"></i><i style="left:69%;top:24%;width:18%;height:14%;background:#c8f0d8"></i></div><p>Kanban</p></div>
+        <div class="tpl"><div class="art dots"><i style="left:40%;top:40%;width:20%;height:18%;background:#4f46e5;border-radius:99px"></i><i style="left:10%;top:16%;width:18%;height:14%;background:#e3d7ff;border-radius:99px"></i><i style="left:72%;top:16%;width:18%;height:14%;background:#e3d7ff;border-radius:99px"></i><i style="left:10%;top:70%;width:18%;height:14%;background:#e3d7ff;border-radius:99px"></i><i style="left:72%;top:70%;width:18%;height:14%;background:#e3d7ff;border-radius:99px"></i></div><p>Mind map</p></div>
+        <div class="tpl"><div class="art dots"><i style="left:8%;top:40%;width:18%;height:18%;background:#1d1d1f;border-radius:99px"></i><i style="left:34%;top:40%;width:20%;height:18%;background:#fff;box-shadow:0 0 0 2px #1d1d1f"></i><i style="left:62%;top:40%;width:20%;height:18%;background:#fff;box-shadow:0 0 0 2px #1d1d1f"></i><i style="left:62%;top:72%;width:20%;height:14%;background:#eef0ff;box-shadow:0 0 0 2px #4f46e5"></i></div><p>Flowchart</p></div>
+        <div class="tpl"><div class="art dots"><i style="left:8%;top:16%;width:84%;height:12%;background:#1d1d1f"></i><i style="left:8%;top:36%;width:18%;height:16%;background:#cfe6ff"></i><i style="left:30%;top:36%;width:18%;height:16%;background:#cfe6ff"></i><i style="left:52%;top:36%;width:18%;height:16%;background:#cfe6ff"></i><i style="left:74%;top:36%;width:18%;height:16%;background:#cfe6ff"></i><i style="left:8%;top:58%;width:18%;height:16%;background:#fff0a6"></i><i style="left:52%;top:58%;width:18%;height:16%;background:#fff0a6"></i></div><p>User story map</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="final soft">
+    <div class="wrap">
+      <div class="head" style="margin-bottom:0">
+        <h2 class="h-lg">Free. Open. Yours.</h2>
+        <p class="sub">Oriw is free for everyone, forever. Teams and companies can add hosted sync and enterprise controls later.</p>
+        <div class="cta">
+          <a class="btn btn-primary" data-link="releases" href="#">Download Oriw</a>
+          <a class="link-more" data-link="repo" href="#">View on GitHub</a>
+        </div>
+      </div>
     </div>
   </section>
 </main>
 
 <footer>
-  <div class="wrap foot">
-    <span>Oriw is open source under AGPL-3.0. “Oriw” and the Oriw mark are trademarks of the Oriw project.</span>
-    <nav aria-label="Footer">
-      <a data-link="repo" href="#">GitHub</a>
-      <a data-link="security" href="#">Security</a>
-      <a data-link="releases" href="#">Releases</a>
-      <a data-link="contributing" href="#">Contributing</a>
-    </nav>
+  <div class="wrap foot-in">
+    <span>Oriw (said OR-ee-w) is open source under AGPL-3.0. “Oriw” and the Oriw mark are trademarks of the Oriw project.</span>
+    <nav aria-label="Footer"><a data-link="repo" href="#">GitHub</a><a data-link="security" href="#">Security</a><a data-link="contributing" href="#">Contribute</a></nav>
   </div>
 </footer>
 
 <script>
 (function(){
-  // Set these once your GitHub org and repo exist.
-  var LINKS = {
-    repo: '#', releases: '#', security: '#', contributing: '#', waitlist: '#', contact: '#'
-  };
-  document.querySelectorAll('[data-link]').forEach(function(a){
-    var u = LINKS[a.getAttribute('data-link')];
-    if (u && u !== '#') a.setAttribute('href', u);
-  });
-
+  var LINKS = { repo: 'https://github.com/oriw-app', releases: '#', security: 'https://github.com/oriw-app/.github/blob/main/SECURITY.md', contributing: 'https://github.com/oriw-app/.github/blob/main/CONTRIBUTING.md' };
+  document.querySelectorAll('[data-link]').forEach(function(a){ var u = LINKS[a.getAttribute('data-link')]; if (u && u !== '#') a.setAttribute('href', u); });
   var ua = (navigator.userAgent || '').toLowerCase();
-  var os = ua.indexOf('windows') > -1 ? 'Windows' : ua.indexOf('mac') > -1 ? 'macOS' : ua.indexOf('linux') > -1 && ua.indexOf('android') < 0 ? 'Linux' : '';
+  var os = ua.indexOf('windows') > -1 ? 'Windows' : ua.indexOf('mac') > -1 ? 'Mac' : (ua.indexOf('linux') > -1 && ua.indexOf('android') < 0) ? 'Linux' : '';
   if (os) document.getElementById('dl-label').textContent = 'Download for ' + os;
 
-  var demo = document.getElementById('demo');
-  var hint = document.getElementById('demo-hint');
-  var drag = null;
-  demo.querySelectorAll('.sticky').forEach(function(s){
+  var frame = document.getElementById('frame'), drag = null;
+  frame.querySelectorAll('.sticky').forEach(function(s){
     s.addEventListener('pointerdown', function(e){
       if (s.classList.contains('ghost')) return;
-      var r = demo.getBoundingClientRect(), sr = s.getBoundingClientRect();
-      drag = {el: s, dx: e.clientX - sr.left, dy: e.clientY - sr.top, r: r};
-      s.classList.add('dragging');
-      s.setPointerCapture(e.pointerId);
+      var fr = frame.getBoundingClientRect(), sr = s.getBoundingClientRect();
+      drag = {el:s, dx:e.clientX - sr.left, dy:e.clientY - sr.top, fr:fr};
+      s.classList.add('dragging'); s.setPointerCapture(e.pointerId);
     });
     s.addEventListener('pointermove', function(e){
       if (!drag || drag.el !== s) return;
-      var r = drag.r, w = s.offsetWidth, h = s.offsetHeight;
-      var x = Math.max(0, Math.min(r.width - w, e.clientX - r.left - drag.dx));
-      var y = Math.max(48, Math.min(r.height - h, e.clientY - r.top - drag.dy));
+      var x = Math.max(0, Math.min(drag.fr.width - s.offsetWidth, e.clientX - drag.fr.left - drag.dx));
+      var y = Math.max(30, Math.min(drag.fr.height - s.offsetHeight, e.clientY - drag.fr.top - drag.dy));
       s.style.left = x + 'px'; s.style.top = y + 'px';
-      if (hint) { hint.remove(); hint = null; }
     });
-    function end(){ if (drag && drag.el === s) { s.classList.remove('dragging'); drag = null; } }
-    s.addEventListener('pointerup', end);
-    s.addEventListener('pointercancel', end);
+    function end(){ if (drag && drag.el === s){ s.classList.remove('dragging'); drag = null; } }
+    s.addEventListener('pointerup', end); s.addEventListener('pointercancel', end);
   });
-
-  var ghost = document.getElementById('ghost');
-  var toast = document.getElementById('agent-toast');
+  var ghost = document.getElementById('ghost'), toast = document.getElementById('toast');
   function accept(){
     if (!ghost.classList.contains('ghost')) return;
-    ghost.classList.remove('ghost');
-    ghost.querySelector('small').textContent = 'Added by agent';
-    document.getElementById('toast-text').textContent = 'Added. Undo with Ctrl Z';
+    ghost.classList.remove('ghost'); ghost.querySelector('small').textContent = 'Added by agent';
+    document.getElementById('toast-t').textContent = 'Added. Undo anytime';
     var b = document.getElementById('accept'); if (b) b.remove();
     setTimeout(function(){ toast.hidden = true; }, 2200);
   }
   document.getElementById('accept').addEventListener('click', accept);
   ghost.addEventListener('click', accept);
-  demo.addEventListener('keydown', function(e){ if (e.key === 'Tab' && ghost.classList.contains('ghost')) { e.preventDefault(); accept(); } });
+  document.getElementById('board').addEventListener('keydown', function(e){ if (e.key === 'Tab' && ghost.classList.contains('ghost')) { e.preventDefault(); accept(); } });
+
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reduce) {
+    var c1 = document.getElementById('cur1'), c2 = document.getElementById('cur2'), board = document.getElementById('board'), t = 0;
+    var move = function(){
+      var w = board.clientWidth, h = board.clientHeight; t++;
+      c1.style.transform = 'translate(' + Math.round(w * (0.42 + 0.12 * Math.sin(t))) + 'px,' + Math.round(h * (0.45 + 0.08 * Math.cos(t * 1.3))) + 'px)';
+      c2.style.transform = 'translate(' + Math.round(w * (0.72 + 0.06 * Math.cos(t * 0.8))) + 'px,' + Math.round(h * (0.22 + 0.1 * Math.sin(t * 1.1))) + 'px)';
+    };
+    move(); setInterval(move, 1600);
+  }
+
+  var cv = document.getElementById('speed'), ctx = cv.getContext('2d');
+  var N = 100, cell = 34, cols = ['#fff0a6','#ffd6cb','#cfe6ff','#c8f0d8','#e3d7ff'], colors = [];
+  var seed = 7; function rnd(){ seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+  for (var i = 0; i < N * N; i++) colors.push(cols[Math.floor(rnd() * cols.length)]);
+  var world = N * cell, zoomEl = document.getElementById('zoom-pct');
+  function size(){ var r = cv.getBoundingClientRect(), d = window.devicePixelRatio || 1; cv.width = Math.round(r.width * d); cv.height = Math.round(r.height * d); ctx.setTransform(d,0,0,d,0,0); }
+  function draw(time){
+    var w = cv.clientWidth, h = cv.clientHeight;
+    var phase = reduce ? 0.35 : (Math.sin(time / 2600) + 1) / 2;
+    var minZ = Math.max(w, h) / world, z = minZ + (1.25 - minZ) * Math.pow(phase, 2.2);
+    var cx = world * (0.5 + 0.18 * Math.sin(time / 5200) * phase), cy = world * (0.5 + 0.18 * Math.cos(time / 6100) * phase);
+    ctx.fillStyle = '#f7f7f5'; ctx.fillRect(0, 0, w, h);
+    var x0 = cx - w / 2 / z, y0 = cy - h / 2 / z;
+    var c0 = Math.max(0, Math.floor(x0 / cell)), c1x = Math.min(N - 1, Math.ceil((x0 + w / z) / cell));
+    var r0 = Math.max(0, Math.floor(y0 / cell)), r1 = Math.min(N - 1, Math.ceil((y0 + h / z) / cell));
+    var s = (cell - 8) * z;
+    for (var r = r0; r <= r1; r++) for (var c = c0; c <= c1x; c++) {
+      ctx.fillStyle = colors[r * N + c];
+      ctx.fillRect((c * cell - x0) * z, (r * cell - y0) * z, s, s);
+    }
+    if (z > 0.8) { ctx.fillStyle = 'rgba(24,24,27,.45)'; for (var r2 = r0; r2 <= r1; r2++) for (var c2 = c0; c2 <= c1x; c2++) ctx.fillRect((c2 * cell - x0) * z + 4 * z, (r2 * cell - y0) * z + 6 * z, s * 0.6, 2 * z); }
+    zoomEl.textContent = Math.round(z * 100) + '%';
+    if (!reduce) requestAnimationFrame(draw);
+  }
+  size(); window.addEventListener('resize', size);
+  requestAnimationFrame(draw);
 })();
 </script>
 </body>
