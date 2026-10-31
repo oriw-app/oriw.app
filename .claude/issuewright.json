@@ -1,0 +1,9 @@
+{
+  "mainBranch": "main",
+  "sourceGlobs": [],
+  "testGlobs": [],
+  "docsGlobs": [
+    "*.md"
+  ],
+  "domainDoc": "../oriw/docs/DOMAIN.md"
+}
