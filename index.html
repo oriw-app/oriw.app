@@ -23,25 +23,8 @@
   --font-sans:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
   --font-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
   --radius-md:8px;--radius-lg:12px;--radius-xl:16px;
+  color-scheme:light;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --canvas-bg:#111114;--canvas-dot:#26262b;--surface:#1c1c21;--surface-muted:#26262b;--border:#3f3f46;
-  --ink:#f4f4f5;--ink-muted:#a1a1aa;--accent:#818cf8;--accent-ink:#111114;--accent-soft:#262a4d;--accent-soft-ink:#c7d2fe;
-  --success:#4ade80;--success-soft:#12301f;--warning:#fbbf24;--warning-soft:#33270d;
-  --sticky-yellow:#f2de7a;--sticky-coral:#f0b4a4;--sticky-blue:#a8c8f0;--sticky-green:#9fd8b5;--sticky-lilac:#c3b3f0;
-  --state-hover:rgba(255,255,255,.08);
-  --shadow-float:0 0 0 1px rgba(255,255,255,.07),0 8px 24px rgba(0,0,0,.4);
-  --shadow-sticky:0 1px 1px rgba(0,0,0,.3),0 4px 10px rgba(0,0,0,.35);
-  color-scheme:dark}}
-:root[data-theme="dark"]{
-  --canvas-bg:#111114;--canvas-dot:#26262b;--surface:#1c1c21;--surface-muted:#26262b;--border:#3f3f46;
-  --ink:#f4f4f5;--ink-muted:#a1a1aa;--accent:#818cf8;--accent-ink:#111114;--accent-soft:#262a4d;--accent-soft-ink:#c7d2fe;
-  --success:#4ade80;--success-soft:#12301f;--warning:#fbbf24;--warning-soft:#33270d;
-  --sticky-yellow:#f2de7a;--sticky-coral:#f0b4a4;--sticky-blue:#a8c8f0;--sticky-green:#9fd8b5;--sticky-lilac:#c3b3f0;
-  --state-hover:rgba(255,255,255,.08);
-  --shadow-float:0 0 0 1px rgba(255,255,255,.07),0 8px 24px rgba(0,0,0,.4);
-  --shadow-sticky:0 1px 1px rgba(0,0,0,.3),0 4px 10px rgba(0,0,0,.35);
-  color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--canvas-bg);color:var(--ink);font:400 16px/1.6 var(--font-sans);-webkit-font-smoothing:antialiased}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--canvas-bg)}
@@ -199,6 +182,16 @@ p{margin:0}
 .plan .note{font-size:13px;color:var(--ink-muted);margin-top:auto}
 .plan .btn{justify-content:center}
 
+/* comparison */
+.cmp-wrap{overflow-x:auto;border-radius:var(--radius-xl);background:var(--surface);box-shadow:var(--shadow-float)}
+.cmp{width:100%;min-width:560px;border-collapse:collapse;font-size:15px}
+.cmp th,.cmp td{padding:14px 18px;text-align:left;vertical-align:top;border-top:1px solid var(--border)}
+.cmp thead th{border-top:0;font-size:13px;font-weight:600;color:var(--ink-muted);background:var(--surface-muted)}
+.cmp thead th.us{color:var(--accent-ink);background:var(--accent)}
+.cmp tbody th{font-weight:600;white-space:nowrap;width:120px}
+.cmp td{color:var(--ink-muted)}
+.cmp td.us{color:var(--ink);font-weight:500;background:var(--accent-soft)}
+
 /* faq */
 .faq{max-width:780px;display:flex;flex-direction:column;gap:10px}
 .faq details{border-radius:var(--radius-lg);background:var(--surface);border:1px solid var(--border);padding:0 18px}
@@ -230,6 +223,7 @@ footer{padding-block:40px 56px;color:var(--ink-muted);font-size:14px}
         <span class="logo-mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2.4" aria-hidden="true"><circle cx="12" cy="12" r="7"></circle><circle class="core" cx="12" cy="12" r="2"></circle></svg></span>Oriw
       </a>
       <nav class="nav-links" aria-label="Sections">
+        <a href="#compare">Why switch</a>
         <a href="#features">Features</a>
         <a href="#agent">AI agent</a>
         <a href="#security">Security</a>
@@ -249,9 +243,9 @@ footer{padding-block:40px 56px;color:var(--ink-muted);font-size:14px}
   <section class="hero dots">
     <div class="wrap hero-grid">
       <div>
-        <span class="pill"><span class="dot"></span>Public preview · v0.1.9 · Apache-2.0</span>
-        <h1>Think on an infinite canvas. <em>Keep it yours.</em></h1>
-        <p class="lede">Oriw is the open-source whiteboard for teams that want a full-featured board without seat bills. Boards stay encrypted on your device, and a built-in AI agent does the busywork with the model you choose.</p>
+        <span class="pill"><span class="dot"></span>Public preview · v0.1.9 · Open source (AGPL-3.0)</span>
+        <h1>Everything you need a whiteboard for. <em>None of the seat bills.</em></h1>
+        <p class="lede">Oriw is the open-source whiteboard for teams tired of per-seat pricing and slow, cloud-locked boards. It stays smooth on huge boards, works offline, keeps every board encrypted on your device, and has an AI agent that runs on the model you choose. Viewers are always free.</p>
         <div class="cta-row">
           <a class="btn btn-primary" data-link="releases" href="#" id="dl-btn">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"></path><path d="M7 10l5 5 5-5"></path><path d="M5 21h14"></path></svg><span id="dl-label">Download for desktop</span></a>
@@ -291,6 +285,32 @@ footer{padding-block:40px 56px;color:var(--ink-muted);font-size:14px}
       <div class="promise"><strong>No seats</strong><span>Viewers are free and you never get billed for someone you shared a board with.</span></div>
       <div class="promise"><strong>No AI credits</strong><span>Use your own Claude key or a local Llama model. Unlimited, and you see the cost first.</span></div>
       <div class="promise"><strong>No lock-in</strong><span>An open, documented file format and full-resolution export. Leave whenever you like.</span></div>
+    </div>
+  </section>
+
+
+  <section class="section" id="compare" style="padding-block:72px 8px">
+    <div class="wrap">
+      <span class="frame-label">Frame · Why teams switch</span>
+      <div class="section-head">
+        <h2>What changes when you switch to Oriw</h2>
+        <p>The things people complain about most in cloud whiteboards, fixed by design.</p>
+      </div>
+      <div class="cmp-wrap">
+        <table class="cmp">
+          <thead><tr><th scope="col"></th><th scope="col">Typical cloud whiteboard</th><th scope="col" class="us">Oriw</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Pricing</th><td>Per-seat billing; sharing can add paid seats</td><td class="us">No seats. Viewers always free</td></tr>
+            <tr><th scope="row">Free plan</th><td>A handful of editable boards</td><td class="us">Unlimited boards, forever</td></tr>
+            <tr><th scope="row">Big boards</th><td>Slow down as boards grow</td><td class="us">Built to stay smooth past 10,000 objects</td></tr>
+            <tr><th scope="row">Offline</th><td>Needs an internet connection</td><td class="us">Works fully offline</td></tr>
+            <tr><th scope="row">AI</th><td>Metered credits, cost shown after</td><td class="us">Your own model or a local one, cost shown first</td></tr>
+            <tr><th scope="row">Your data</th><td>Stored on the vendor's servers</td><td class="us">Encrypted on your device</td></tr>
+            <tr><th scope="row">Workshops</th><td>Timer and voting on paid plans</td><td class="us">Timer and voting free</td></tr>
+            <tr><th scope="row">Leaving</th><td>Limited, low-resolution export</td><td class="us">Open .oriw format, full-resolution export</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </section>
 
@@ -444,7 +464,7 @@ footer{padding-block:40px 56px;color:var(--ink-muted);font-size:14px}
       <span class="frame-label">Frame · FAQ</span>
       <div class="section-head" style="margin-bottom:24px"><h2>Questions</h2></div>
       <div class="faq">
-        <details><summary>Is Oriw really free?</summary><p>Yes. The desktop app is open source under Apache-2.0 and free forever, with unlimited boards. Companies pay only for enterprise features like SSO and a support agreement, or for the optional hosted relay.</p></details>
+        <details><summary>Is Oriw really free?</summary><p>Yes. The desktop app is open source under AGPL-3.0 and free forever, with unlimited boards. Companies pay only for enterprise features like SSO and a support agreement, or for the optional hosted relay.</p></details>
         <details><summary>Where are my boards stored?</summary><p>On your computer, inside an encrypted vault. If you turn on Google Drive backup, Oriw encrypts each board before upload, so Google stores only files it cannot read.</p></details>
         <details><summary>Which AI models can I use?</summary><p>Claude with your own API key, or Llama running locally through Ollama. With a local model, nothing leaves your device. You can also turn AI off completely.</p></details>
         <details><summary>Can my team work on the same board?</summary><p>Live sessions arrive in 0.2: share an invite link and edit together, end-to-end encrypted. A self-hosted team server follows in 0.3.</p></details>
@@ -464,7 +484,7 @@ footer{padding-block:40px 56px;color:var(--ink-muted);font-size:14px}
 
 <footer>
   <div class="wrap foot">
-    <span>Oriw is open source under Apache-2.0. “Oriw” and the Oriw mark are trademarks of the Oriw project.</span>
+    <span>Oriw is open source under AGPL-3.0. “Oriw” and the Oriw mark are trademarks of the Oriw project.</span>
     <nav aria-label="Footer">
       <a data-link="repo" href="#">GitHub</a>
       <a data-link="security" href="#">Security</a>
