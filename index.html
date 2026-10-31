@@ -177,6 +177,29 @@ section{padding-block:120px}
 .tpl .art i{position:absolute;border-radius:2px}
 .tpl p{padding:12px 14px;font-size:15px;font-weight:600}
 
+.plans{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;max-width:1120px;margin:0 auto}
+@media (max-width:1100px){.plans{grid-template-columns:repeat(2,minmax(0,1fr));max-width:760px}}
+@media (max-width:640px){.plans{grid-template-columns:minmax(0,1fr);max-width:520px}}
+.plan{border-radius:24px;background:var(--surface);padding:32px 24px;display:flex;flex-direction:column;gap:14px}
+.plan{position:relative}
+.plan.pop{box-shadow:0 0 0 2px var(--accent)}
+.badge{position:absolute;top:-13px;left:24px;height:26px;padding:0 12px;border-radius:99px;background:var(--accent);color:#fff;font-size:12px;font-weight:600;display:inline-flex;align-items:center}
+.plan h3{font-size:24px;letter-spacing:-.02em;white-space:nowrap}
+.plan .who{color:var(--ink-muted)}
+.price{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:6px 0 4px}
+.price b{font-size:48px;line-height:1;font-weight:700;letter-spacing:-.04em}
+.price span{color:var(--ink-muted);font-size:15px}
+.plan ul{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:10px}
+.plan li{display:flex;gap:10px;font-size:16px}
+.plan li::before{content:"";flex-shrink:0;width:18px;height:18px;margin-top:3px;border-radius:99px;background:var(--accent-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234f46e5' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12l4 4 8-8'/%3E%3C/svg%3E") center/12px no-repeat}
+.plan .btn{margin-top:auto;align-self:flex-start}
+.btn-soon{background:var(--bg-soft);color:var(--ink-muted);cursor:default}
+.btn-soon:hover{filter:none}
+.promises{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;max-width:1080px;margin:56px auto 0;text-align:center}
+.promises b{display:block;font-size:17px;margin-bottom:4px}
+.promises span{color:var(--ink-muted);font-size:15px}
+@media (max-width:860px){.promises{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:480px){.promises{grid-template-columns:minmax(0,1fr)}}
 .final{text-align:center}
 footer{border-top:1px solid var(--border);padding-block:28px 48px;color:var(--ink-muted);font-size:12px}
 .foot-in{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
@@ -191,7 +214,7 @@ footer{border-top:1px solid var(--border);padding-block:28px 48px;color:var(--in
   <div class="wrap nav-in">
     <a class="logo" href="#top" aria-label="Oriw home"><span class="mark"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" aria-hidden="true"><circle cx="12" cy="12" r="7"></circle><circle cx="12" cy="12" r="2" fill="#fff"></circle></svg></span>Oriw</a>
     <nav class="nav-links" aria-label="Sections">
-      <a href="#speed-sec">Speed</a><a href="#zoom-sec">Zoom</a><a href="#agent-sec">AI agent</a><a href="#together-sec">Together</a><a href="#privacy-sec">Privacy</a>
+      <a href="#speed-sec">Speed</a><a href="#zoom-sec">Zoom</a><a href="#agent-sec">AI agent</a><a href="#together-sec">Together</a><a href="#privacy-sec">Privacy</a><a href="#pricing-sec">Pricing</a>
     </nav>
     <a class="btn btn-primary" data-link="releases" href="#">Download</a>
   </div>
@@ -411,11 +434,80 @@ footer{border-top:1px solid var(--border);padding-block:28px 48px;color:var(--in
     </div>
   </section>
 
-  <section class="final soft">
+  <section id="pricing-sec" class="soft">
+    <div class="wrap">
+      <div class="head">
+        <h2 class="h-lg">Free for people. Fair for companies.</h2>
+        <p class="sub">No seats, no lock-in, no surprises.</p>
+      </div>
+      <div class="plans">
+        <div class="plan">
+          <h3>Free</h3>
+          <p class="who">For individuals, teams and startups.</p>
+          <div class="price"><b>$0</b></div>
+          <ul>
+            <li>Unlimited boards and editors</li>
+            <li>Live collaboration, computer to computer</li>
+            <li>Unlimited viewers, guests and clients</li>
+            <li>AI agent with the model you choose</li>
+            <li>Encrypted Google Drive backup</li>
+            <li>Any spare computer keeps boards in sync</li>
+          </ul>
+          <a class="btn btn-primary" data-link="releases" href="#">Download free</a>
+        </div>
+        <div class="plan">
+          <h3>Cloud</h3>
+          <p class="who">For anyone who'd rather not leave a computer on.</p>
+          <div class="price"><b>$3</b><span>per active editor, per month</span></div>
+          <ul>
+            <li>Everything in Free</li>
+            <li>Boards in sync around the clock</li>
+            <li>Full version history</li>
+            <li>Encrypted, so we can't read your boards</li>
+          </ul>
+          <span class="btn btn-soon" aria-disabled="true">Coming soon</span>
+        </div>
+        <div class="plan pop">
+          <span class="badge">No servers needed</span>
+          <h3>Enterprise</h3>
+          <p class="who">Standalone Oriw, with company controls.</p>
+          <div class="price"><b>$8</b><span>per active editor, per month</span></div>
+          <ul>
+            <li>Everything in Free</li>
+            <li>Company sign-in, enforced</li>
+            <li>Admin policies on every device</li>
+            <li>Audit logs</li>
+            <li>Company key recovery</li>
+            <li>Support and compliance reports</li>
+          </ul>
+          <span class="btn btn-soon" aria-disabled="true">Coming soon</span>
+        </div>
+        <div class="plan">
+          <h3>Enterprise Cloud</h3>
+          <p class="who">Enterprise, run for you.</p>
+          <div class="price"><b>$12</b><span>per active editor, per month</span></div>
+          <ul>
+            <li>Everything in Enterprise and Cloud</li>
+            <li>Staff added and removed automatically from your HR and sign-in systems</li>
+            <li>Choice of data region</li>
+          </ul>
+          <span class="btn btn-soon" aria-disabled="true">Coming soon</span>
+        </div>
+      </div>
+      <div class="promises">
+        <div><b>Pay for activity, not seats.</b><span>Only people who edited this month count. Viewers never do.</span></div>
+        <div><b>Bills go down too.</b><span>Fewer editors next quarter means credit back.</span></div>
+        <div><b>No AI markup.</b><span>Use your own key or a local model.</span></div>
+        <div><b>Fair everywhere.</b><span>Local prices. Enterprise free under 50 people, and for schools, non-profits and open source.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
     <div class="wrap">
       <div class="head" style="margin-bottom:0">
         <h2 class="h-lg">Free. Open. Yours.</h2>
-        <p class="sub">Oriw is free for everyone, forever. Teams and companies can add hosted sync and enterprise controls later.</p>
+        <p class="sub">Download Oriw and start in seconds. No account needed.</p>
         <div class="cta">
           <a class="btn btn-primary" data-link="releases" href="#">Download Oriw</a>
           <a class="link-more" data-link="repo" href="#">View on GitHub</a>
