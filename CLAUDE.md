@@ -40,6 +40,7 @@ Every change is checked against the twelve product principles in the `oriw` READ
 
 ## Rules
 
+- **DDD + BDD + TDD, with hexagonal architecture and strict CQS**, as set out in `oriw/docs/ENGINEERING.md` and `oriw/docs/ARCHITECTURE.md`. Here that means acceptance criteria are written as Given / When / Then, wording matches the glossary in `oriw/docs/DOMAIN.md`, and checkable behaviour (layout at 1280 and 390 px, working links) is checked before pushing.
 - Never commit passwords, keys or tokens. CI in `oriw` runs a secret scan; secrets live in GitHub encrypted secrets or the OS keychain.
 - Never put salaries, costs, revenue or customer names in a public repo; they belong in `oriw-company`.
 - Commits are authored by the person running the session (their git config). Keep the commit message trailers the session adds.
